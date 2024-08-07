@@ -12,8 +12,11 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+        Transaction transaction = null;
         try (Session session = Util.openSession()) {
-            Transaction transaction = session.beginTransaction();
+
+            transaction = session.beginTransaction();
+
 
             String createTableQuery = "CREATE TABLE IF NOT EXISTS users (" +
                     "id BIGSERIAL PRIMARY KEY, " +
@@ -21,11 +24,19 @@ public class UserDaoHibernateImpl implements UserDao {
                     "lastName VARCHAR(255) NOT NULL, " +
                     "age SMALLINT NOT NULL)";
 
+
             session.createSQLQuery(createTableQuery).executeUpdate();
+
 
             transaction.commit();
         } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
             System.out.println("Error creating table: " + e.getMessage());
+
         }
     }
 
@@ -80,7 +91,7 @@ public class UserDaoHibernateImpl implements UserDao {
             return session.createQuery("FROM User", User.class).list();
         } catch (Exception e) {
             System.out.println("Error getting all users: " + e.getMessage());
-            return Collections.emptyList(); // Возвращаем пустой список в случае ошибки
+            return Collections.emptyList();
         }
     }
 

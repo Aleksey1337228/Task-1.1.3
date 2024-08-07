@@ -3,7 +3,6 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String insert = "insert into users values (default,?,?,?)";
         try (
                 Connection connection = Util.open();
-                PreparedStatement preparedStatement = connection.prepareStatement(insert) // создаем стейтмент, который позволяет добавлять данные в запроос
+                PreparedStatement preparedStatement = connection.prepareStatement(insert)
         ) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -79,7 +78,7 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
         try (
                 Connection connection = Util.open();
-                Statement statement = connection.createStatement() //Нужен для того, чтобы выполнить запрос и получить результат
+                Statement statement = connection.createStatement()
         ) {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
